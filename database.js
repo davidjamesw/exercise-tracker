@@ -10,7 +10,8 @@ const userSchema = new Schema({
   description: {type: String},
   duration: {type: Number},
   date: {type: String},
-  userId: {type: String}
+  userId: {type: String},
+  log: {type: Array}
 })
 const User = mongoose.model("User", userSchema);
 
@@ -48,16 +49,22 @@ function addExercise(exercise, response) {
     duration: parseInt(exercise.duration),
     date: exerciseDate.toDateString()
   };
-  console.log(`Updating user ${exercise.userId} with following exercise details ${userExercise.description}, ${userExercise.duration}, ${userExercise.date}`);
-  User.findByIdAndUpdate(exercise.userId, userExercise, { new: true }, (err, data) => {
-      if (err) {
-        response(err, null);
-        console.error(err);
-      }
-      userExercise.username = data.username;
-      userExercise._id = data._id;
-      response(null, userExercise);
-  });
+  
+  User
+    .findById(exercise.userId)
+    .then(user => {
+      console.log(`Updating user ${user._id} with following exercise details ${userExercise.description}, ${userExercise.duration}, ${userExercise.date}`);
+      let addToSet =  { $addToSet: { log: [userExercise] } };
+      User.updateOne({_id: user._id}, addToSet, (err, data) => {
+        if (err) {
+          response(err, null);
+          console.error(err);
+        }
+        userExercise.username = user.username;
+        userExercise._id = user._id;
+        response(null, userExercise);
+      });
+    });
 }
 
 exports.saveNewUserToDatabase = saveNewUserToDatabase;
