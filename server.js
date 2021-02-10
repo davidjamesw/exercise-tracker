@@ -42,7 +42,7 @@ app.post('/api/exercise/add', (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      res.json(results);
+      res.json(result);
     }
   });
 });
