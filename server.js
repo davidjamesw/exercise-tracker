@@ -31,8 +31,9 @@ app.get('/api/exercise/users', (req, res) => {
   database.getAllUsersFromDatabase((err, results) => {
     if (err) {
       res.send(err);
+    } else {
+      res.json(results);
     }
-    res.json(results);
   });
 });
 
@@ -40,7 +41,18 @@ app.post('/api/exercise/add', (req, res) => {
   database.addExercise(req.body, (err, result) => {
     if (err) {
       res.send(err);
+    } else {
+      res.json(results);
     }
-    res.json(result);
+  });
+});
+
+app.get('/api/exercise/log', (req, res) => {
+  database.getLogByUserId(req.query.userId, (err, log) => {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send({log: log});
+    }
   });
 });

@@ -59,14 +59,27 @@ function addExercise(exercise, response) {
         if (err) {
           response(err, null);
           console.error(err);
+        } else {
+          userExercise.username = user.username;
+          userExercise._id = user._id;
+          response(null, userExercise);          
         }
-        userExercise.username = user.username;
-        userExercise._id = user._id;
-        response(null, userExercise);
       });
     });
+}
+
+function getLogByUserId(userId, response) {
+  User.findById(userId, (err, user) => {
+    if (err) {
+      response(err, null);
+      console.error(err);
+    } else {
+      response(null, user.log);
+    }
+  });
 }
 
 exports.saveNewUserToDatabase = saveNewUserToDatabase;
 exports.getAllUsersFromDatabase = getAllUsersFromDatabase;
 exports.addExercise = addExercise;
+exports.getLogByUserId = getLogByUserId;
