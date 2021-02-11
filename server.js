@@ -48,7 +48,7 @@ app.post('/api/exercise/add', (req, res) => {
 });
 
 app.get('/api/exercise/log', (req, res) => {
-  database.getLogByUserId(req.query.userId, (err, log) => {
+  database.getLogByUserId(req.query.userId, req.query.fromDate, req.query.toDate, 1, (err, log) => {
     if (err) {
       res.send(err);
     } else {

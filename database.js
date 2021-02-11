@@ -68,14 +68,24 @@ function addExercise(exercise, response) {
     });
 }
 
-function getLogByUserId(userId, response) {
-  User.findById(userId, (err, user) => {
-    if (err) {
-      response(err, null);
-      console.error(err);
-    } else {
-      response(null, user.log);
-    }
+function getLogByUserId(userId, fromDate, toDate, limit, response) {
+  User.findById(userId).then(user => {
+    user.log = user.log.filter((log) => {
+      if (!fromDate) {
+        return true;
+      }
+      return new Date(log.date) >= new Date(fromDate);
+    });
+    user.log = user.log.filter((log) => {
+      if (!toDate) {
+        return true;
+      }
+      return new Date(log.date) <= new Date(toDate);
+    });
+    response(null, user.log);
+  }).catch(err => {
+    response(err, null);
+    console.error(err);
   });
 }
 
