@@ -52,7 +52,7 @@ app.get('/api/exercise/log', (req, res) => {
     if (err) {
       res.send(err);
     } else {
-      res.send({log: log});
+      res.send({log: log, count: log.length});
     }
   });
 });
