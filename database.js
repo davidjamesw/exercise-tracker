@@ -82,7 +82,10 @@ function getLogByUserId(userId, fromDate, toDate, limit, response) {
       }
       return new Date(log.date) <= new Date(toDate);
     });
-    response(null, user.log);
+    if (!limit)
+      response(null, user.log);
+    else
+      response(null, user.log.slice(0, limit));
   }).catch(err => {
     response(err, null);
     console.error(err);
